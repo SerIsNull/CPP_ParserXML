@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<TechObjects name="Объекты">
+  <leafs>
+    <Option visible="0" name="Начальный UID объектов" value="13500" />
+  </leafs>
+  <branches>
+    <TechObject name="Копия1" UID="000000" type="Общий">
+    </TechObject>
+	<TechObject name="Копия2" UID="000000" type="Общий">
+    </TechObject>
+	<TechObject name="Копия3" UID="000000" type="Общий">
+    </TechObject>
+	<TechObject name="Копия4" UID="000000" type="Общий">
+    </TechObject>
+	<TechObject name="Копия5" UID="000000" type="Общий">
+    </TechObject>
+	<TechObject name="Копия6" UID="000000" type="Общий">
+    </TechObject>
+  </branches>
+</TechObjects>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<TechObjects name="Объекты">
+  <leafs>
+    <Option visible="0" name="Начальный UID объектов" value="13500" />
+  </leafs>
+  <branches>
+    <TechObject name="Копия2" UID="222222" type="Общий">
+    </TechObject>
+  </branches>
+</TechObjects>

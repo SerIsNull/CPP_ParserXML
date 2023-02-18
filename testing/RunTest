@@ -1,0 +1,68 @@
+#!/bin/bash
+
+#==========================================#
+# This file helped with Testing my Parser  #
+#==========================================#
+#Desc: OneAPTS-If you have one APTS file   #
+#      SomeAPTS-If you have some APTS files#
+#==========================================#
+WinDir="/home/administrator/Share"
+LnxDir=".."
+echo Enter Test Mode: OneAPTS or SomeAPTS
+read Mode
+
+
+
+# Copy GRKFile from Windows Directory
+#sudo cp -p $WinDir/ForTest/ObjectsGRK $LnxDir/
+#if [ $? -eq 0 ]; then
+#	echo Copy input-file GRK File = OK!!!
+#fi
+
+# Copy APTSFile from Windows Directory
+#sudo cp -p $WinDir/ForTest/APTS/NewObjects/* $LnxDir/NewObjects/
+#if [ $? -eq 0 ]; then	
+#	echo Copy  input-file APTS File = OK!!!
+#fi
+
+
+# Compile *.cpp -> Parser
+g++ $LnxDir/src/*.cpp $LnxDir/src-lib/*.cpp -o $LnxDir/testing/Parser
+if [ $? -eq 0 ]; then	
+	echo Compile src.cpp -\> Parser = OK!!!
+fi
+
+# Make backup src GRK-file before Pars
+sudo cp -p $LnxDir/testing/input/ObjectsGRK $LnxDir/
+
+# Check mode for testing
+# One APTS-file input
+if [ $Mode == "OneAPTS" ]; then
+	$LnxDir/./Run -GRK $LnxDir/testing/input/ObjectsGRK -APTS $LnxDir/testing/input/ObjectsAPTS1
+	if [ $? -eq 0 ]; then	
+		echo End pars. For One APTS-file
+	fi
+fi
+
+# Some APTS-files input
+if [ $Mode == "SomeAPTS" ]; then
+	$LnxDir/./Run -GRK $LnxDir/testing/input/ObjectsGRK -APTS $LnxDir/testing/input/ObjectsAPTS*
+	if [ $? -eq 0 ]; then	
+		echo End parse. For Some APTS-files
+	fi
+fi
+
+# Move res GRK-file after Pars
+sudo mv $LnxDir/testing/input/ObjectsGRK $LnxDir/testing/output/
+
+# Restore src GRK-file after Pars
+sudo mv $LnxDir/ObjectsGRK $LnxDir/testing/input/
+
+# Remove Parser
+sudo rm -f ./Parser
+# Copy Result GRKFile to Windows Direcory
+#sudo cp -p $LnxDir/testing/ObjectsGRK ~/Share/
+#if [ $? -eq 0 ]; then
+#        echo Cpy output GRK-File 
+#fi
+

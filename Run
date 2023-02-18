@@ -1,0 +1,130 @@
+#!/bin/bash
+
+#============THIS=FUNCTION=PARSE=INPUT=PARAMRTERS=========================#
+#=========================================================================#
+Parse () {
+	dataStartGRK=0
+	dataEndGRK=1
+	dataStartAPTS=2
+	dataEndAPTS=$Var_CntPrm
+	it=""
+	
+	Var_KeyGRK=${Arr_InPrm[$dataStartGRK]}
+	Var_PathGRK=${Arr_InPrm[$dataEndGRK]}
+
+	Var_KeyAPTS=${Arr_InPrm[$dataStartAPTS]}
+	dataStartAPTS=$dataStartAPTS+1
+	for((it=$dataStartAPTS; it<$Var_CntPrm; it++))
+	do
+		Arr_PathAPTS[$it-2]="${Arr_InPrm[$it]}"
+	done
+}
+#==========================END============================================#
+#=========================================================================#
+
+#============THIS=FUNCTION=CHECK=INPUT=PARAMRTERS=========================#
+#=========================================================================#
+
+PrmIsValid () {
+# Check Prm of GRK
+	if [ $Var_KeyGRK = "-GRK" ] && ! [ -f $Var_PathGRK ]; then
+		return 1
+	fi
+# Check Prm of APTS
+	if [ $Var_KeyAPTS = "-APTS" ]; then
+		for pathAPTS in ${Arr_PathAPTS[*]}
+		do
+			if ! [[ -f $pathAPTS ]]; then	
+				return 2
+			fi
+		done
+	else
+		return 2
+	fi
+}
+#===============================END=======================================#
+#=========================================================================#
+
+#=================THIS=FUNCTION=GET=ERROR=DESCRIPTION=====================#
+#=========================================================================#
+
+GetErrorDesc() {
+	err=$1
+	case $err in
+	0)
+		echo The input parameters are valid!!! You are a good guy!
+	;;
+	1)
+		echo Error. The GRK input Parameters are wrong!!!
+	;;
+	2)
+		echo Error. The APTS input Parameters are wrong!!!
+	;;
+	*)
+		echo Error!!!
+	;;
+	esac
+}
+#===============================END======================================#
+#========================================================================#
+
+
+#==========================MAIN=FUNCTION=================================#
+#========================================================================#
+
+#You need to set this path manually!!! It's a default path!!!!
+Var_PathParser="./Parser"
+
+Arr_InPrm=("$@")
+Var_CntPrm=$#
+Var_ErrCode=0
+
+Var_KeyGRK=""
+Var_PathGRK=""
+
+Var_KeyAPTS=""
+Arr_PathAPTS=()
+
+Var_ErrCode=0
+
+#--------------------GET-PATH-TO-OBJECTS-APTS-AND-GRK--------------------#
+Parse $Arr_InPrm							 #
+#------------------------------------------------------------------------#
+
+
+#--------------------CHECK-PATH-AND-INPUT-KEYS---------------------------#
+PrmIsValid $Var_KeyGRK $Var_PathGRK $Var_KeyAPTS $Arr_PathAPTS		 #
+#------------------------------------------------------------------------#
+
+
+#--------------------EXIT-IF-FOUND-ERROR---------------------------------#
+Var_ErrCode=$?							         #
+GetErrorDesc $Var_ErrCode						 #
+#------------------------------------------------------------------------#
+
+echo =================PRINT=INPUT=PARAMETERS=============================
+if [ $Var_ErrCode -eq 0 ]; then
+	echo 1. Path_To_GRK_Objects
+	echo $Var_PathGRK
+	echo 2. Path_To_APTS_Objects
+	for ind in ${Arr_PathAPTS[*]}
+		do
+	   	 echo $ind
+	done
+echo ====================================================================
+echo
+echo ========================RUN=PARSER==================================
+
+	for pathAPTS in ${Arr_PathAPTS[*]}
+	do
+		$Var_PathParser $Var_PathGRK $pathAPTS
+echo =========================END=PARSE==================================
+		sleep 2
+	done
+fi
+
+echo See you later!!!
+#=============================END=MAIN====================================#
+#=========================================================================#
+
+
